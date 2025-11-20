@@ -9,7 +9,16 @@ import SwiftUI
 
 struct HomePageView: View {
     var body: some View {
-        Text("Hello, welcome to the homepage")
+        VStack {
+            Text("Hello, welcome to the homepage")
+                .bold()
+        }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(
+            LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.3), Color.white]),
+                           startPoint: .top, endPoint: .bottom)
+        )
     }
 }
 
