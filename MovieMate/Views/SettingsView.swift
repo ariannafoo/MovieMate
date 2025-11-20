@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @Binding var isLoggedIn: Bool
     @State private var errorMessage = ""
     @State private var showSignOutConfirmation = false
 
@@ -49,7 +50,7 @@ struct SettingsView: View {
                     title: Text("Sign Out"),
                     message: Text("Are you sure you want to sign out?"),
                     primaryButton: .destructive(Text("Sign Out")) {
-                        // TODO: Create sign out method
+                        signOut()
                     },
                     secondaryButton: .cancel()
                 )
@@ -68,8 +69,11 @@ struct SettingsView: View {
         )
     }
     
-}
-
-#Preview {
-    SettingsView()
+    private func signOut() {
+        AuthService.shared.signOut { success in
+            if success {
+                isLoggedIn = false   // Go back to login screen
+            }
+        }
+    }
 }

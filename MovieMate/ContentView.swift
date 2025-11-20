@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var isLoggedIn = true // later: check Firebase user
+    @State private var isLoggedIn = false // later: check Firebase user
 
     var body: some View {
         Group {
@@ -20,14 +20,16 @@ struct ContentView: View {
                             Label("Home", systemImage: "house.fill")
                         }
 
-                    SettingsView()
+                    SettingsView(isLoggedIn: $isLoggedIn)
                         .tabItem {
                             Label("Settings", systemImage: "gearshape.fill")
                         }
                 }
             } else {
                 // show auth screens
-                AuthView()
+                AuthView(onAuthSuccess: {
+                    isLoggedIn = true
+                })
             }
         }
     }

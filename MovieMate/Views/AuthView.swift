@@ -9,6 +9,8 @@ import SwiftUI
 
 struct AuthView: View {
     
+    var onAuthSuccess: (() -> Void)? = nil   // Parent sets this to switch to Home
+    
     @State private var email = ""
     @State private var password = ""
     @State private var username = ""
@@ -16,6 +18,7 @@ struct AuthView: View {
     @State private var emailError: String?
     @State private var passwordError: String?
     @State private var usernameError: String?
+    @State private var authErrorMessage: String?
     
     var body: some View {
         VStack(spacing: 16) {
@@ -61,9 +64,9 @@ struct AuthView: View {
                     validateFields()
                     if emailError == nil && passwordError == nil && (!isSignUp || usernameError == nil) {
                         if isSignUp {
-                            // TODO: Create signUp()
+                            signUp()
                         } else {
-                            // TODO: Create signIn()
+                            signIn()
                         }
                     }
                 }) {
@@ -108,6 +111,37 @@ struct AuthView: View {
         }
     }
     
+    private func signIn() {
+        AuthService.shared.signInUser(
+            email: email,
+            password: password
+        ) { result in
+            handleAuthResult(result)
+        }
+    }
+    
+    private func signUp() {
+        AuthService.shared.signUpUser(
+            email: email,
+            password: password,
+            fullName: username
+        ) { result in
+            handleAuthResult(result)
+        }
+    }
+    
+    private func handleAuthResult(_ result: Result<String, Error>) {
+        switch result {
+        case .success(let uid):
+            print("✅ Auth success for uid: \(uid)")
+            authErrorMessage = nil
+            onAuthSuccess?()   // tells parent to show Home
+            
+        case .failure(let error):
+            print("❌ Auth error: \(error.localizedDescription)")
+            authErrorMessage = error.localizedDescription
+        }
+    }
 } // Struct
 
 #Preview {
