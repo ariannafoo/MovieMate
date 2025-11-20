@@ -8,14 +8,28 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var isLoggedIn = true // later: check Firebase user
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Group {
+            if isLoggedIn {
+                // show main app
+                TabView {
+                    HomePageView()
+                        .tabItem {
+                            Label("Home", systemImage: "house.fill")
+                        }
+
+                    SettingsView()
+                        .tabItem {
+                            Label("Settings", systemImage: "gearshape.fill")
+                        }
+                }
+            } else {
+                // show auth screens
+                AuthView()
+            }
         }
-        .padding()
     }
 }
 
