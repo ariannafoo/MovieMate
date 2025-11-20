@@ -9,6 +9,9 @@ import SwiftUI
 
 struct SignInView: View {
     // TODO: let onSwitchToSignUp: () -> Void
+    @State private var email = ""
+    @State private var password = ""
+    @FocusState private var isFocused: Bool
     
     var body: some View {
         
@@ -20,20 +23,23 @@ struct SignInView: View {
                 
                 // Label
                 Text("Email Address")
+                    .foregroundColor(isFocused ? .blue : .gray)
                 
                 // Email field
-                TextField("e.g., johnsmith@email.com", text: .constant(""))
+                TextField("e.g., johnsmith@email.com", text: $email)
                     .padding(12)
                     .autocapitalization(.none)
                     .background(
                         RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.gray, lineWidth: 1)
+                            .stroke((isFocused ? Color.blue : .gray), lineWidth: 1)
                     )
+                    .focused($isFocused)
+
                 // Label
                 Text("Password")
                 
                 // Password field
-                SecureField("e.g., Password321!", text: .constant(""))
+                SecureField("e.g., Password321!", text: $password)
                     .padding(12)
                     .background(
                         RoundedRectangle(cornerRadius: 8)
